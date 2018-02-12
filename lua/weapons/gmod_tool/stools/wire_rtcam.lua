@@ -28,6 +28,9 @@ function TOOL:LeftClick( trace )
 	local ply 		= self:GetOwner()
 	local pid 		= ply:UniqueID()
 	
+	
+	if not ply:CheckLimit("cameras") then return end
+
 	local Pos = trace.StartPos
 	
 	local camera = ents.Create( "gmod_wire_rtcam" )
@@ -47,6 +50,8 @@ function TOOL:LeftClick( trace )
 	
 	ply:AddCleanup( "cameras", camera )
 	
+	ply:AddCount("cameras", camera)
+
 	if !RenderTargetCamera || #ents.FindByClass( "gmod_rtcameraprop" ) == 1 then UpdateRenderTarget( camera ) end
 	
 	return false, camera
