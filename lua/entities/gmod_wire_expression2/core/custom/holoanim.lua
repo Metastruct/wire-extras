@@ -84,6 +84,13 @@ e2function number holoAnimNum(index, string animation)
 	return Holo.ent:LookupSequence(animation) or 0
 end
 
+e2function array holoAnimList(index)
+	local Holo = CheckIndex(self, index)
+	if not Holo then return end
+	
+	return Holo.ent:GetSequenceList()
+end
+
 e2function void holoSetPose(index, string pose, value)
 	local Holo = CheckIndex(self, index)
 	if not Holo then return end
