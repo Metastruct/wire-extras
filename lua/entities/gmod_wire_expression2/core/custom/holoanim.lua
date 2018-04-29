@@ -84,13 +84,14 @@ e2function number holoAnimNum(index, string animation)
 	return Holo.ent:LookupSequence(animation) or 0
 end
 
+-- Returns a list of animations for a hologram, note that while this list may start at 1, the actual list starts at 0
 e2function array holoAnimList(index)
 	local Holo = CheckIndex(self, index)
 	if not Holo then return end
 
 	local keytable = Holo.ent:GetSequenceList()
 	local array = {}
-	local i = 0 --note: we index at 0 here because that's how GetSequenceList returns it
+	local i = 1 
 	for _,k in pairs(keytable) do
 		array[i] = k
 		i = i + 1
