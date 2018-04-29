@@ -87,8 +87,15 @@ end
 e2function array holoAnimList(index)
 	local Holo = CheckIndex(self, index)
 	if not Holo then return end
-	
-	return Holo.ent:GetSequenceList()
+
+	local keytable = Holo.ent:GetSequenceList()
+	local array = {}
+	local i = 0 --note: we index at 0 here because that's how GetSequenceList returns it
+	for _,k in pairs(keytable) do
+		array[i] = k
+		i = i + 1
+	end
+	return array
 end
 
 e2function void holoSetPose(index, string pose, value)
