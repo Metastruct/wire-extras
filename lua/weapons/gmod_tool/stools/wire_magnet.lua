@@ -46,13 +46,13 @@ function TOOL:LeftClick( trace )
 	
 	local leng 		= tonumber(self:GetClientNumber( "leng" ))
 	local strength	 	= tonumber(self:GetClientNumber("streng" ))
-	local propfilter	 	= tostring(self.ClientConVar[ "propfilter" ])
+	local propfilter	 	= string.lower( self:GetClientInfo( "propfilter" ) )
 	local targetmetal	 	= tonumber(self:GetClientNumber( "targetOnlyMetal" ))==1
 	local starton	 	= tonumber(self:GetClientNumber( "startOn" ))==1
 	
 
 	//update
-	if ( trace.Entity:IsValid() && trace.Entity:GetClass() == "gmod_wire_realmagnet" && trace.Entity:GetTable().pl == ply ) then
+	if ( trace.Entity:IsValid() && trace.Entity:GetClass() == "gmod_wire_realmagnet") then
 	
 		
 		trace.Entity:SetModel(self.ClientConVar[ "model" ]) 
@@ -69,17 +69,16 @@ function TOOL:LeftClick( trace )
 	end
 	
 	if ( !self:GetSWEP():CheckLimit( "wire_magnets" ) ) then return false end
-	
-	
-	local min = self.GhostEntity:OBBMins()
-	
-	local wire_ball = MakeWireMagnet( ply, trace.HitPos - trace.HitNormal * min.z, leng, strength, targetmetal, self.ClientConVar[ "model" ],propfilter)
+		
+	local wire_ball = MakeWireMagnet( ply, trace.HitPos, leng, strength, targetmetal, self.ClientConVar[ "model" ],propfilter)
 	wire_ball:SetOn(util.tobool(starton))
 	local const = WireLib.Weld(wire_ball, trace.Entity, trace.PhysicsBone, true)
 	local Ang = trace.HitNormal:Angle()
 	Ang.pitch = Ang.pitch + 90
 	wire_ball:SetAngles(Ang)
-	wire_ball:GetTable().pl=self:GetOwner()
+	
+	local min = wire_ball:OBBMins()
+	wire_ball:SetPos( trace.HitPos - trace.HitNormal * min.z )
 	
 	undo.Create("WireMagnet")
 		undo.AddEntity( wire_ball )
@@ -102,7 +101,7 @@ function TOOL:RightClick(trace)
 end
 if (SERVER) then
 
-	function MakeWireMagnet( ply, Pos, leng, strength, targetOnlyMetal,model,propfilter )
+	function MakeWireMagnet( ply, Pos, leng, strength, targetOnlyMetal,model,propfilter, starton )
 	
 		if ( !ply:CheckLimit( "wire_magnets" ) ) then return nil end
 	
@@ -122,6 +121,7 @@ if (SERVER) then
 		wire_ball:SetPlayer( ply )
 		wire_ball:SetModel(model)
 		wire_ball:Spawn()
+		wire_ball:SetOn(starton and tobool(starton))
 		
 		ply:AddCount( "wire_magnets", wire_ball )
 		
@@ -129,7 +129,7 @@ if (SERVER) then
 		
 	end
 	
-	duplicator.RegisterEntityClass("gmod_wire_realmagnet", MakeWireMagnet, "Pos", "Strength", "Len", "On", "PropFilter", "TargetOnlyMetal", "Backwards")
+	duplicator.RegisterEntityClass("gmod_wire_realmagnet", MakeWireMagnet, "Pos", "Len", "Strength", "TargetOnlyMetal", "Model", "PropFilter", "On" )
 
 end
 
