@@ -25,9 +25,8 @@ local function SetHoloAnim( Holo, Animation, Frame, Rate )
 			end
 		end
 		Holo.ent:ResetSequence(Animation)
-		Holo.ent:SetCycle(math.Clamp(Frame,0,1))
-		-- over 12 is clamped by the engine, negative values break cycle value
-		Holo.ent:SetPlaybackRate(math.Clamp(Rate,0,12)) 
+		Holo.ent:SetCycle(Frame)
+		Holo.ent:SetPlaybackRate(Rate)
 	end
 end
 

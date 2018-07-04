@@ -18,9 +18,7 @@ local MODEL = Model( "models/jaanus/wiretool/wiretool_range.mdl" )
 	5 = SkewY
 	6 = Trace Water
 	
-	7 = HitNormal X
-	8 = HitNormal Y
-	9 = HitNormal Z
+	7 = unused
 ]]--
 
 function ENT:Initialize()
@@ -41,7 +39,7 @@ function ENT:Setup()
 	
 	self.Memory = {}
 	
-	for i = 0, 9 do
+	for i = 0, 7 do
 		self.Memory[i] = 0
 	end
 	
@@ -73,10 +71,9 @@ function ENT:Trace()
 	trace = util.TraceLine( trace )
 	
 	local dist = 0
-	local hitnormal = Vector( 0, 0, 0 )
+	
 	if ( trace.Hit ) then
 		dist = trace.Fraction * self.Memory[2]
-		hitnormal = trace.HitNormal
 	else
 		if ( not ( self.Memory[3] > 0 ) ) then
 			dist = self.Memory[2]
@@ -84,9 +81,6 @@ function ENT:Trace()
 	end
 	
 	self.Memory[1] = dist or 0
-	self.Memory[7] = hitnormal.x or 0
-	self.Memory[8] = hitnormal.y or 0
-	self.Memory[9] = hitnormal.z or 0
 	self:UpdateTPS( true )
 end
 
@@ -108,7 +102,7 @@ function ENT:ShowOutput()
 end
 
 function ENT:ReadCell( Address )
-	if ( Address >= 0 and Address <= 9 ) then
+	if ( Address >= 0 and Address <= 7 ) then
 		return self.Memory[Address]
 	end
 end
@@ -117,7 +111,7 @@ function ENT:WriteCell( Address, Value )
 	if ( Address == 0 and Value > 0 ) then
 		self:Trace()
 		return true
-	elseif ( Address >= 2 and Address <= 6 ) then
+	elseif ( Address >= 2 and Address <= 7 ) then
 		self.Memory[Address] = Value
 		return true
 	end

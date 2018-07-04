@@ -10,7 +10,6 @@ function ENT:Initialize( )
 	for i = 0, 2047 do
 		self.Memory[i] = 0
 	end
-	self.RBound = Vector(1024,1024,1024)
 end
 
 function HSHoloemitter_DataMsg( um )
@@ -34,9 +33,6 @@ end
 
 function ENT:Think( )
 	self:ShowOutput()
-	-- To make it visible across the entire map
-	local p = LocalPlayer():GetPos()
-	self:SetRenderBoundsWS( p - self.RBound, p + self.RBound )
 end
 
 function ENT:ShowOutput()

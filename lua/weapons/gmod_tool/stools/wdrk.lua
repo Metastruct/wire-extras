@@ -1,4 +1,4 @@
-TOOL.Category = "Wire Extras/Other"
+TOOL.Category = "Wire - Data"
 TOOL.Name = "#Directional Radio Tool"
 TOOL.Command = nil
 TOOL.ConfigName = ""
