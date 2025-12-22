@@ -43,7 +43,9 @@ function ENT:Initialize()
 end
 
 function ENT:OnRemove()
-	self.xent:Remove()
+	if IsValid(self.xent) then
+		self.xent:Remove()
+	end
 end
 
 function ENT:TriggerInput(iname, value)
@@ -201,6 +203,7 @@ function ENT:makedoor(ply,trace,ang,model,open,close,autoclose,closetime,class,h
 		entit:Fire("addoutput","OnFullyClosed " .. xuuid .. ",xtfclose",0)
 	end
 
+	ply:AddCleanup( "doors", entit )
 	self.xent = entit
 	self.xclass = tostring(class)
 end
